@@ -1,7 +1,0 @@
-version: '3.8'
-
-services:
-  app:
-    build: .
-    container_name: my_solution_container
-    command: python -m unittest discover -s . -p "test_my_solution.py"
