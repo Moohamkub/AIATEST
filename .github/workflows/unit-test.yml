@@ -14,8 +14,8 @@ jobs:
         python-version: '3.x'
     - name: Install dependencies
       run: |
-      pip install --upgrade pip
-      pip install -r requirements.txt --use-deprecated=legacy-resolver
+        pip install --upgrade pip
+        pip install -r requirements.txt --use-deprecated=legacy-resolver
     - name: Run test
       run: |
         source venv/bin/activate
