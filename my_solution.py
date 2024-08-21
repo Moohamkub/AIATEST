@@ -20,7 +20,7 @@ def extract_top_n_ids(file_path, n):
     line_number = 1
 
     try:
-        with open(file_path, 'r',encoding='utf-8') as file:
+        with open(file_path, 'r', encoding='utf-8') as file:
             for line in file:
                 line = line.strip()
 
