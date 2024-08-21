@@ -20,7 +20,7 @@ def extract_top_n_ids(file_path, n):
     line_number = 1
 
     try:
-        with open(file_path, 'r') as file:
+        with open(file_path, 'r',encoding='utf-8') as file:
             for line in file:
                 line = line.strip()
 
@@ -29,13 +29,13 @@ def extract_top_n_ids(file_path, n):
                     line_number += 1
                     continue
                 
-                parts = line.split()
-                if len(parts) != 2:
+                line_split = line.split()
+                if len(line_split) != 2:
                     logging.warning(f"Line {line_number} is invalid form : '{line}'.")
                     line_number += 1
                     continue
                 
-                id_str, value_str = parts
+                id_str, value_str = line_split
                 try:
                     value = int(value_str)
                     line_count += 1

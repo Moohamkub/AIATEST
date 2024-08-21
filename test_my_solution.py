@@ -93,8 +93,8 @@ class TestExtractTopNIds(unittest.TestCase):
     @patch('my_solution.logging')
     def test_file_not_found(self, mock_logging):
         with patch("builtins.open", side_effect=FileNotFoundError):
-            extract_top_n_ids("non_existent_file.txt", 5)
-            mock_logging.error.assert_called_with("File not found : non_existent_file.txt")
+            extract_top_n_ids("testfile.txt", 5)
+            mock_logging.error.assert_called_with("File not found : testfile.txt")
 
 if __name__ == '__main__':
     unittest.main()
