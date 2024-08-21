@@ -2,9 +2,10 @@ import unittest
 from unittest.mock import patch, mock_open
 from io import StringIO
 import sys
-from my_solution import extract_ids
+import logging
+from my_solution import extract_top_n_ids
 
-class TestExtractIds(unittest.TestCase):
+class TestExtractTopNIds(unittest.TestCase):
 
     def setUp(self):
         self.saved_stdout = sys.stdout
@@ -13,71 +14,87 @@ class TestExtractIds(unittest.TestCase):
     def tearDown(self):
         sys.stdout = self.saved_stdout
 
-    def testValidInput(self):
+    @patch('my_solution.logging')
+    def test_valid_input(self, mock_logging):
         test_data = "id1_1 1000\nid2_1 2000\nid3_1 3000\n"
         with patch("builtins.open", mock_open(read_data=test_data)):
-            extract_ids("dummy_path", 2)
+            extract_top_n_ids("dummy_path", 2)
             output = self.output.getvalue().strip().split("\n")
             self.assertEqual(set(output), {"id3_1", "id2_1"})
 
-    def testInvalidValue(self):
+    @patch('my_solution.logging')
+    def test_invalid_value(self, mock_logging):
         test_data = "id1_1 1000\nid2_1 abc\nid3_1 3000\n"
         with patch("builtins.open", mock_open(read_data=test_data)):
-            extract_ids("dummy_path", 2)
+            extract_top_n_ids("dummy_path", 2)
             output = self.output.getvalue().strip().split("\n")
-            expected_output = {"id3_1", "id1_1", "line number 2 is not integer value = id2_1 abc"}
+            expected_output = {"id3_1", "id1_1"}
             self.assertEqual(set(output), expected_output)
+            mock_logging.error.assert_called_with("Line 2 not a integer value : 'abc'.")
 
-    def testExtraValueAdded(self):
+    @patch('my_solution.logging')
+    def test_extra_value_added(self, mock_logging):
         test_data = "id1_1 1000\nid2_1 2000 extra\nid3_1 3000\n"
         with patch("builtins.open", mock_open(read_data=test_data)):
-            extract_ids("dummy_path", 2)
+            extract_top_n_ids("dummy_path", 2)
             output = self.output.getvalue().strip().split("\n")
-            # Include the warning message in the expected output
-            expected_output = {"id3_1", "id1_1", "line number 2 is not in pattern unique_id and an value = id2_1 2000 extra"}
+            expected_output = {"id3_1", "id1_1"}
             self.assertEqual(set(output), expected_output)
+            mock_logging.warning.assert_called_with("Line 2 is invalid form : 'id2_1 2000 extra'.")
 
-    def testEmptyLine(self):
+    @patch('my_solution.logging')
+    def test_empty_line(self, mock_logging):
         test_data = "id1_1 1000\n\nid3_1 3000\n"
         with patch("builtins.open", mock_open(read_data=test_data)):
-            extract_ids("dummy_path", 2)
+            extract_top_n_ids("dummy_path", 2)
             output = self.output.getvalue().strip().split("\n")
-            expected_output = {"id3_1", "id1_1", "line number 2 is empty"}
+            expected_output = {"id3_1", "id1_1"}
             self.assertEqual(set(output), expected_output)
+            mock_logging.warning.assert_called_with("Line 2 is empty.")
 
-    def testInvalidN(self):
+    @patch('my_solution.logging')
+    def test_invalid_n(self, mock_logging):
         test_data = "id1_1 1000\nid2_1 2000\nid3_1 3000\n"
         with patch("builtins.open", mock_open(read_data=test_data)):
-            extract_ids("dummy_path", 0)
-            output = self.output.getvalue().strip()
-            self.assertEqual(output, "Number must be positive integer")
-            
+            extract_top_n_ids("dummy_path", 0)
+            mock_logging.error.assert_called_with("Number of ids to extract must be a positive integer.")
             self.output.truncate(0)
             self.output.seek(0)
+            extract_top_n_ids("dummy_path", -1)
+            mock_logging.error.assert_called_with("Number of ids to extract must be a positive integer.")
 
-            extract_ids("dummy_path", -1)
-            output = self.output.getvalue().strip()
-            self.assertEqual(output, "Number must be positive integer")
-
-    def testNGreaterThanLine(self):
+    @patch('my_solution.logging')
+    def test_n_greater_than_lines(self, mock_logging):
         test_data = "id1_1 1000\nid2_1 2000\n"
         with patch("builtins.open", mock_open(read_data=test_data)):
-            extract_ids("dummy_path", 5)
+            extract_top_n_ids("dummy_path", 5)
             output = self.output.getvalue().strip().split("\n")
             self.assertEqual(set(output), {"id2_1", "id1_1"})
 
-    def testFileWithNoInvalidData(self):
+    @patch('my_solution.logging')
+    def test_file_with_no_valid_data(self, mock_logging):
         test_data = "\nabc\nid2_1 abc\n"
         with patch("builtins.open", mock_open(read_data=test_data)):
-            extract_ids("dummy_path", 2)
+            extract_top_n_ids("dummy_path", 2)
+            mock_logging.warning.assert_any_call("Line 1 is empty.")
+            mock_logging.warning.assert_any_call("Line 2 is invalid form : 'abc'.")
+            mock_logging.error.assert_any_call("Line 3 not a integer value : 'abc'.")
+            mock_logging.error.assert_called_with("No valid data in this file.")
+
+    @patch('my_solution.logging')
+    def test_large_input(self, mock_logging):
+        test_data = "\n".join(f"id{i} {i * 1000}" for i in range(1, 10001))
+        with patch("builtins.open", mock_open(read_data=test_data)):
+            extract_top_n_ids("dummy_path", 5)
             output = self.output.getvalue().strip().split("\n")
-            expected_output = [
-                "line number 1 is empty",
-                "line number 2 is not in pattern unique_id and an value = abc",
-                "line number 3 is not integer value = id2_1 abc",
-                "no valid data found in the input file"
-            ]
-            self.assertEqual(output, expected_output)
+            expected_output = {f"id9999", f"id10000", f"id9998", f"id9997", f"id9996"}
+            self.assertEqual(set(output), expected_output)
+
+    @patch('my_solution.logging')
+    def test_file_not_found(self, mock_logging):
+        with patch("builtins.open", side_effect=FileNotFoundError):
+            extract_top_n_ids("non_existent_file.txt", 5)
+            mock_logging.error.assert_called_with("File not found : non_existent_file.txt")
 
 if __name__ == '__main__':
     unittest.main()
