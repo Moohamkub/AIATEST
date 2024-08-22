@@ -2,7 +2,6 @@ import unittest
 from unittest.mock import patch, mock_open
 from io import StringIO
 import sys
-import logging
 from my_solution import extract_top_n_ids
 
 class TestExtractTopNIds(unittest.TestCase):
