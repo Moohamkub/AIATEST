@@ -1,7 +1,7 @@
 ## Problem Overview
 This project aims to develop a solution that extracts the IDs of the N highest values from an input file. Each row in the input file contains a unique ID and an integer value, separated by a space. The goal is to print the extracted IDs. The order of the output IDs does not matter.
 
-## Prerequisites
+## Prerequisites 
 1. Docker:
 Make sure Docker is installed and running. You can download it here: https://www.docker.com/
 
