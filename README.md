@@ -1,5 +1,15 @@
-# Problem Overview
+## Problem Overview
 This project aims to develop a solution that extracts the IDs of the N highest values from an input file. Each row in the input file contains a unique ID and an integer value, separated by a space. The goal is to print the extracted IDs. The order of the output IDs does not matter.
+
+## Prerequisites
+1. Docker:
+Make sure Docker is installed and running. You can download it here: https://www.docker.com/
+
+2. Git:
+Clone the repository with Git: https://git-scm.com/downloads
+
+3. Python:
+If you want to contribute with this project: https://www.python.org/downloads/
 
 ## Design and Data Structure
 Use min-heap to track the largest values efficiently. A min-heap is well-suited for this task because the smallest value is always at the root, making it quick to drop the smallest value and replace it with a larger one.
@@ -40,6 +50,8 @@ The space complexity is O(N), where N is the number of top values to extract and
 
 ## Running Unit Tests
 The unit tests are currently in progress. You can check for updates regarding the testing process through pull requests in the repository.
+
+To run the tests make sure you have python 3.x and use the following command: python -m unittest test_my_solution.py
 
 
 
