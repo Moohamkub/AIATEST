@@ -4,4 +4,4 @@ WORKDIR /app
 
 COPY . /app
 
-CMD ["python", "my_solution.py", "input.txt", "2"]
+CMD ["python", "my_solution.py", "testdata.txt", "2"]
