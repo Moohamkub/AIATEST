@@ -35,7 +35,7 @@ The space complexity is O(N), where N is the number of top values to extract and
 
 4. After building the Docker image, you can run the container using : docker run --rm your_image_name
 
-#### The default setup executes is python my_solution.py testdata.txt 2
+[^1]: The default setup executes is python my_solution.py testdata.txt 2
 
 5. If you want to use a custom testdata and specify the number of top values to extract, run the following: docker run --rm somename python my_solution.py <your_data_file> <N>
 
