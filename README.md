@@ -8,8 +8,11 @@ Example:
 For a dataset data = [100, 90, 80, 85, 120, 70], and if we want to find the top 3 largest values, we can use a min-heap as follows:
 
 Step 1: Insert the first 3 values into the heap: [80, 100, 90] (heap maintains smallest value at root).
+
 Step 2: Compare 85 with the smallest value (80), since 85 > 80, replace 80 with 85. Now the heap becomes: [85, 100, 90].
+
 Step 3: Compare 120 with the smallest value (85), since 120 > 85, replace 85 with 120. The heap now becomes: [90, 120, 100].
+
 Step 4: Compare 70 with the smallest value (90), but since 70 < 90, it is ignored. The final heap contains the top 3 largest values: [90, 120, 100].
 
 ## Complexity Analysis
@@ -24,19 +27,19 @@ The space complexity is O(N), where N is the number of top values to extract and
 
 ## Deployment Steps
 
-Clone the Repository: git clone https://github.com/Moohamkub/AIATEST.git
+1. Clone the Repository: git clone https://github.com/Moohamkub/AIATEST.git
 
-Change directory to the Project Directory : cd AIATEST
+2. Change directory to the Project Directory : cd AIATEST
 
-Run the following command to build the Docker image : docker build -t your_image_name .
+3. Run the following command to build the Docker image : docker build -t your_image_name .
 
-After building the Docker image, you can run the container using : docker run --rm your_image_name
+4. After building the Docker image, you can run the container using : docker run --rm your_image_name
 
-The default setup executes is python my_solution.py testdata.txt 2
+#### The default setup executes is python my_solution.py testdata.txt 2
 
-If you want to use a custom testdata and specify the number of top values to extract, run the following: docker run --rm somename python my_solution.py <your_data_file> <N>
+5. If you want to use a custom testdata and specify the number of top values to extract, run the following: docker run --rm somename python my_solution.py <your_data_file> <N>
 
-## Running Unit Tests**
+## Running Unit Tests
 The unit tests are currently in progress. You can check for updates regarding the testing process through pull requests in the repository.
 
 
