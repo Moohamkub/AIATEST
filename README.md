@@ -51,7 +51,7 @@ The space complexity is O(N), where N is the number of top values to extract and
 ## Running Unit Tests
 The unit tests are currently in progress. You can check for updates regarding the testing process through pull requests in the repository.
 
-To run the tests make sure you have python 3.x and use the following command: python -m unittest test_my_solution.py
+To run the tests make sure you have python 3.x and use the following command: python -m unittest discover -s . -p "test_*.py" (for more coming unittest)
 
 
 
